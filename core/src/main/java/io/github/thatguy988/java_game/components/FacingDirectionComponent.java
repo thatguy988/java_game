@@ -1,0 +1,15 @@
+package io.github.thatguy988.java_game.components;
+
+import com.badlogic.ashley.core.Component;
+
+
+public class FacingDirectionComponent implements Component
+{
+    public enum Direction
+    {
+        LEFT,RIGHT
+    }
+
+    public Direction direction = Direction.RIGHT;
+    
+}
