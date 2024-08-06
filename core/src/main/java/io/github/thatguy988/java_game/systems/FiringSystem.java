@@ -8,38 +8,46 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.Shooter;
+import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.factories.BulletFactory;
 
+//handle when next bullet is fired
 public class FiringSystem extends IteratingSystem {
     private ComponentMapper<FacingDirectionComponent> fm = ComponentMapper.getFor(FacingDirectionComponent.class);
     private ComponentMapper<PlayerComponent> sm = ComponentMapper.getFor(PlayerComponent.class);
+    private ComponentMapper<WeaponsComponent> wm = ComponentMapper.getFor(WeaponsComponent.class);
+    private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
+
+
+
 
     private BulletFactory bulletFactory;
 
+
     public FiringSystem(BulletFactory bulletFactory) {
-        super(Family.all(PlayerComponent.class, FacingDirectionComponent.class).get());
+        super(Family.all(PlayerComponent.class, FacingDirectionComponent.class, WeaponsComponent.class).get());
         this.bulletFactory = bulletFactory;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Shooter shooter = sm.get(entity);
+        PlayerComponent player = plcm.get(entity);
         FacingDirectionComponent facing = fm.get(entity);
-
-        if (shooter == null) {
-            System.out.println("Shooter component is missing from entity: " + entity);
-            return;
-        }
-        if (facing == null) {
-            System.out.println("FacingDirectionComponent is missing from entity: " + entity);
-            return;
-        }
+        WeaponsComponent weapon = wm.get(entity);
 
         shooter.setTimeSinceLastShot(shooter.getTimeSinceLastShot() + deltaTime);
 
-        if (shooter.isFiring() && shooter.getTimeSinceLastShot() >= shooter.getFiringCooldown()) {
-            bulletFactory.createBullet(entity, shooter, facing.direction, 200f);
+        if (shooter.isFiring() && shooter.getTimeSinceLastShot() >= weapon.getFiringCooldown()) 
+        {
+            bulletFactory.createBullet(entity, shooter, facing.direction, weapon);
             shooter.setTimeSinceLastShot(0f);
+            if(player != null)
+            {
+                player.setRecoilTriggered(true);
+            }
         }
     }
+
+    
 }

@@ -3,32 +3,43 @@ package io.github.thatguy988.java_game.components;
 import com.badlogic.ashley.core.Component;
 
 public class PlayerComponent implements Component, Shooter {
-    private float firingCooldown = 0.5f;
     private float timeSinceLastShot = 0f;
     private boolean isFiring = false;
+    private boolean recoilTriggered = false;
     private float width = 32;
     private float height = 32;
 
+    public void setRecoilTriggered(boolean triggered)
+    {
+        this.recoilTriggered = triggered;
+
+    }
+
+    public boolean getRecoilTriggered()
+    {
+        return recoilTriggered;
+    }
+
     @Override
     public float getWidth() {
-        return width;
+        return this.width;
     }
 
     @Override
     public float getHeight() {
-        return height;
+        return this.height;
     }
 
     @Override
     public float getFiringCooldown()
     {
-        return firingCooldown;
+        return 0.0f;//null not needed for player
     }
 
     @Override
     public float getTimeSinceLastShot()
     {
-        return timeSinceLastShot;
+        return this.timeSinceLastShot;
     }
 
     @Override
@@ -38,7 +49,7 @@ public class PlayerComponent implements Component, Shooter {
 
     @Override
     public boolean isFiring() {
-        return isFiring;
+        return this.isFiring;
     }
 
     @Override 

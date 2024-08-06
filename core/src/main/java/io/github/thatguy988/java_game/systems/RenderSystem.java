@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import io.github.thatguy988.java_game.components.BulletComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.PositionComponent;
+import io.github.thatguy988.java_game.utils.PositionUtils;
 
 public class RenderSystem extends IteratingSystem {
     private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
@@ -34,8 +35,13 @@ public class RenderSystem extends IteratingSystem {
 
 
         if (entity.getComponent(PlayerComponent.class) != null) {
+            float width = player.getWidth();
+            float height = player.getHeight();
             shapeRenderer.setColor(1, 0, 0, 1); // Red color for player
-            shapeRenderer.rect(position.x, position.y, player.getWidth(), player.getHeight()); // 32x32 square
+            com.badlogic.gdx.math.Vector2 renderPositions = PositionUtils.getRenderPosition(new com.badlogic.gdx.math.Vector2(position.x, position.y), width, height);
+            shapeRenderer.rect(renderPositions.x, renderPositions.y, width, height);
+
+            //shapeRenderer.rect(position.x, position.y, player.getWidth(), player.getHeight()); // 32x32 square
         } else if (entity.getComponent(BulletComponent.class) != null) {
             shapeRenderer.setColor(0, 1, 0, 1); // Green color for bullets
             shapeRenderer.circle(position.x, position.y, 5); // 5 pixel radius circle

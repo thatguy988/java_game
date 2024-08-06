@@ -10,6 +10,6 @@ public class FacingDirectionComponent implements Component
         LEFT,RIGHT
     }
 
-    public Direction direction = Direction.RIGHT;
+    public Direction direction = Direction.LEFT;
     
 }
