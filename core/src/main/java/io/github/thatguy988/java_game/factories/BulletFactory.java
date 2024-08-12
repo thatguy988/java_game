@@ -39,6 +39,9 @@ public class BulletFactory {
             case SHOTGUN:
                 createShotgunSpread(entity, shooter, direction, weapon);
                 break;
+            case MINIGUN:
+                createMachineGunSpread(entity, shooter, direction, weapon.getBulletSpeed());
+                break;
 
         }
     }
@@ -50,7 +53,7 @@ public class BulletFactory {
 
         PositionComponent shooter_position = pm.get(entity);
         
-        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooter_position.x, shooter_position.y), shooter.getWidth(), direction);
+        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooter_position.x, shooter_position.y), shooter.getWidth(), shooter.getHeight(), direction);
 
         PositionComponent position = new PositionComponent(bulletPositions.x, bulletPositions.y);
 
@@ -58,7 +61,35 @@ public class BulletFactory {
         bullet.add(position);
 
         VelocityComponent velocity = new VelocityComponent();
-        velocity.x = direction == FacingDirectionComponent.Direction.RIGHT ? bulletspeed : -bulletspeed;
+        if (direction == FacingDirectionComponent.Direction.RIGHT)
+        {
+            velocity.x = bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.LEFT)
+        {
+            velocity.x = -bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.UP)
+        {
+            velocity.y = bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.DOWN)
+        {
+            velocity.y = -bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.UPRIGHT)
+        {
+            velocity.x = bulletspeed;
+            velocity.y = bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.UPLEFT)
+        {
+            velocity.x = -bulletspeed;
+            velocity.y = bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.DOWNRIGHT)
+        {
+            velocity.x = bulletspeed;
+            velocity.y = -bulletspeed;
+        }else if(direction == FacingDirectionComponent.Direction.DOWNLEFT)
+        {
+            velocity.x = -bulletspeed;
+            velocity.y = -bulletspeed;
+        }
         bullet.add(velocity);
 
         BulletComponent bulletComponent = new BulletComponent();
@@ -84,7 +115,7 @@ public class BulletFactory {
 
         PositionComponent shooterPosition = pm.get(entity);
 
-        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), direction);
+        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), shooter.getHeight(), direction);
 
         
 
@@ -93,7 +124,34 @@ public class BulletFactory {
 
         bullet.add(bulletPosition);
 
-        float baseAngle = (direction == FacingDirectionComponent.Direction.RIGHT) ? 0 : 180;
+        float baseAngle = 0;
+
+        if (direction == FacingDirectionComponent.Direction.RIGHT)
+        {
+            baseAngle = 0;
+        }else if(direction == FacingDirectionComponent.Direction.LEFT)
+        {
+            baseAngle = 180;
+        }else if(direction == FacingDirectionComponent.Direction.UP)
+        {
+            baseAngle = 90;
+        }else if(direction == FacingDirectionComponent.Direction.DOWN)
+        {
+            baseAngle = 270;
+        } else if(direction == FacingDirectionComponent.Direction.UPRIGHT)
+        {
+            baseAngle = 45;
+        }else if (direction == FacingDirectionComponent.Direction.UPLEFT)
+        {
+            baseAngle = 135;
+        }else if (direction == FacingDirectionComponent.Direction.DOWNRIGHT)
+        {
+            baseAngle = 315;
+        }else if (direction == FacingDirectionComponent.Direction.DOWNLEFT)
+        {
+            baseAngle = 225;
+        }
+
         float bulletAngle = baseAngle + angleOffset;
 
         float velocityX = bulletSpeed * (float) Math.cos(Math.toRadians(bulletAngle));
@@ -122,7 +180,35 @@ public class BulletFactory {
 
         for (int i = 0; i < numberofbullets; i++) {
             float angleOffset = (i - (numberofbullets - 1) / 2f) * anglebetweenbullets;
-            float bulletAngle = direction == FacingDirectionComponent.Direction.RIGHT ? angleOffset : 180 + angleOffset;
+            float bulletAngle = angleOffset;
+            if (direction == FacingDirectionComponent.Direction.RIGHT)
+            {
+                bulletAngle = angleOffset;
+
+            }else if(direction == FacingDirectionComponent.Direction.LEFT)
+            {
+                bulletAngle = 180 + angleOffset;
+
+            }else if(direction == FacingDirectionComponent.Direction.UP)
+            {
+                bulletAngle = 90 + angleOffset;
+
+            }else if(direction == FacingDirectionComponent.Direction.DOWN)
+            {
+                bulletAngle = 270 + angleOffset;
+            }else if(direction == FacingDirectionComponent.Direction.UPRIGHT)
+            {
+                bulletAngle = 45 + angleOffset;
+            }else if (direction == FacingDirectionComponent.Direction.UPLEFT)
+            {
+                bulletAngle = 135 + angleOffset;
+            }else if (direction == FacingDirectionComponent.Direction.DOWNRIGHT)
+            {
+                bulletAngle = 315 + angleOffset;
+            }else if (direction == FacingDirectionComponent.Direction.DOWNLEFT)
+            {
+                bulletAngle = 225 + angleOffset;
+            }
 
             float bulletSpeed = weapon.getBulletSpeed();
 
@@ -140,7 +226,7 @@ public class BulletFactory {
 
         PositionComponent shooterPosition = pm.get(entity);
 
-        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), direction);
+        com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), shooter.getHeight(), direction);
 
         PositionComponent bulletPosition = new PositionComponent(bulletPositions.x, bulletPositions.y);
 

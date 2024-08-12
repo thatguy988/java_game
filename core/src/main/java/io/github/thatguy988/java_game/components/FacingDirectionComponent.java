@@ -7,9 +7,9 @@ public class FacingDirectionComponent implements Component
 {
     public enum Direction
     {
-        LEFT,RIGHT
+        LEFT,RIGHT,DOWN,UP,UPRIGHT,UPLEFT,DOWNRIGHT,DOWNLEFT
     }
 
-    public Direction direction = Direction.LEFT;
+    public Direction direction = Direction.RIGHT;
     
 }

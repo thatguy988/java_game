@@ -2,27 +2,14 @@ package io.github.thatguy988.java_game.components;
 
 import com.badlogic.ashley.core.Component;
 
-public class PlayerComponent implements Component, Shooter {
+
+public class EnemyComponent implements Component, Shooter {
+
     private float timeSinceLastShot = 0f;
     private boolean isFiring = false;
-    private boolean recoilTriggered = false;
     private float width = 8;
     private float height = 8;
-    
 
-    
-
-
-    public void setRecoilTriggered(boolean triggered)
-    {
-        this.recoilTriggered = triggered;
-
-    }
-
-    public boolean getRecoilTriggered()
-    {
-        return recoilTriggered;
-    }
 
     @Override
     public float getWidth() {
@@ -55,5 +42,5 @@ public class PlayerComponent implements Component, Shooter {
     {
         this.isFiring = firing;
     }
-
+    
 }

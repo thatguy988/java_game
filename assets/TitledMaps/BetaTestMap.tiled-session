@@ -1,0 +1,46 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "testingmap1.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/jakob/java_game/TileSet/TestingSet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "C:/Users/jakob/java_game/TileSet/tiles.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1.5
+        },
+        "testingmap1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 284.33333333333337,
+                "y": 122.33333333333331
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/jakob/Downloads/adve/adve",
+    "map.height": 30,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 50,
+    "openFiles": [
+        "testingmap1.tmx",
+        "C:/Users/jakob/java_game/TileSet/tiles.tsx"
+    ],
+    "project": "BetaTestMap.tiled-project",
+    "recentFiles": [
+        "C:/Users/jakob/java_game/TileSet/tiles.tsx",
+        "testingmap1.tmx",
+        "C:/Users/jakob/java_game/TileSet/TestingSet.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}

@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Component;
 public interface Shooter extends Component {
     float getWidth();
     float getHeight();
-    float getFiringCooldown();
     float getTimeSinceLastShot();
     void setTimeSinceLastShot(float time);
     boolean isFiring();

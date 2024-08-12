@@ -18,7 +18,6 @@ import io.github.thatguy988.java_game.components.WeaponsComponent.WeaponType;
 import io.github.thatguy988.java_game.utils.PositionUtils;
 
 
-
 public class PlayerFactory 
 {
     private Engine engine;
@@ -32,41 +31,51 @@ public class PlayerFactory
         this.physicsWorld = physicsWorld;
     }
 
-    public Entity createPlayer() {
+    public Entity createPlayer(float playerSpawnX, float playerSpawnY) {
         Entity player = engine.createEntity();
+        
 
         PlayerComponent playerComponent = new PlayerComponent();
         player.add(playerComponent);
 
 
-        // Define Box2D body
+
+
+        // define Box2D body for player
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 0);
+        bodyDef.position.set(playerSpawnX, playerSpawnY);
         Body body = physicsWorld.createBody(bodyDef);
 
         com.badlogic.gdx.math.Vector2 bodyPositions = PositionUtils.getPhysicsBodyPosition(playerComponent.getWidth(), playerComponent.getHeight());
 
+    //public static Vector2 getRenderPosition(Vector2 position, float width, float height) {
 
-        // Define a rectangle shape for the player
+
+
+        // rectangle shape for the player
         PolygonShape rectangle = new PolygonShape();
         
 
-        // Set as half-width and half-height
         rectangle.setAsBox(bodyPositions.x , bodyPositions.y);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = rectangle;
-        fixtureDef.density = 1.0f; // Determines mass and inertia
-        fixtureDef.friction = 0.3f; // Friction when sliding along surfaces
-        fixtureDef.restitution = 0.0f; // Bounce factor (0 for no bounce)
+        fixtureDef.density = 1.0f; // mass and inertia
+        fixtureDef.friction = 0.3f; // friction when sliding along surfaces
+        fixtureDef.restitution = 0.0f; // no bouncing
 
         body.createFixture(fixtureDef);
         rectangle.dispose();
 
+        body.setFixedRotation(true);
+        body.setLinearDamping(5.0f);
+
+
+
         // Add components
-        player.add(new PositionComponent(0f, 0f));
-        //player.add(new VelocityComponent());
+       player.add(new PositionComponent(playerSpawnX, playerSpawnY));
+
         player.add(new FacingDirectionComponent());
         player.add(new WeaponsComponent(WeaponType.PISTOL, 0.25f, 800f, 1));
         player.add(new Box2DComponent(body));

@@ -43,25 +43,49 @@ public class PlayerInputSystem extends IteratingSystem
 
         box2d.playerVelocity.setZero();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        {
-            box2d.playerVelocity.x = -200;
-            facing.direction = FacingDirectionComponent.Direction.LEFT;
-        }
+
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
         {
             box2d.playerVelocity.x = 200;
-            facing.direction = FacingDirectionComponent.Direction.RIGHT;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP))
-        {
-            box2d.playerVelocity.y = 200;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-        {
-            box2d.playerVelocity.y = -200;
         }
 
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+        {
+            box2d.playerVelocity.x = -200;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            facing.direction = FacingDirectionComponent.Direction.LEFT;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            facing.direction = FacingDirectionComponent.Direction.RIGHT;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W))
+        {
+            facing.direction = FacingDirectionComponent.Direction.UP;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S))
+        {
+            facing.direction = FacingDirectionComponent.Direction.DOWN;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            facing.direction = FacingDirectionComponent.Direction.UPRIGHT;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            facing.direction = FacingDirectionComponent.Direction.UPLEFT;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            facing.direction = FacingDirectionComponent.Direction.DOWNRIGHT;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S) && Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            facing.direction = FacingDirectionComponent.Direction.DOWNLEFT;
+        }
 
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
         {
@@ -91,6 +115,13 @@ public class PlayerInputSystem extends IteratingSystem
             weapon.setBulletSpeed(1000f);
             weapon.setBulletsPerShot(5);
             System.out.println("Switched to Shotgun");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
+            weapon.setWeaponType(WeaponType.MINIGUN);
+            weapon.setFiringCooldown(0.01f);
+            weapon.setBulletSpeed(1600f);
+            weapon.setBulletsPerShot(1);
+            System.out.println("Switched to MINIGUN");
         }
     }
     

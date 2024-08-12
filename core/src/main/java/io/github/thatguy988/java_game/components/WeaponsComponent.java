@@ -9,6 +9,7 @@ public class WeaponsComponent implements Component
         PISTOL,
         MACHINEGUN,
         SHOTGUN,
+        MINIGUN,
         ENEMYGRUNT
     }
 

@@ -29,11 +29,23 @@ public class PhysicsSystem extends IteratingSystem
 
         // Update entity position from Box2D body
         Vector2 bodyPosition = box2D.body.getPosition();
+        
         position.x = bodyPosition.x;
         position.y = bodyPosition.y;
 
-        box2D.body.setLinearVelocity(box2D.playerVelocity);
+        // Calculate desired velocity based on player input
+        Vector2 desiredVelocity = new Vector2(box2D.playerVelocity);
 
+        // Get the current velocity of the body
+        Vector2 currentVelocity = box2D.body.getLinearVelocity();
+
+        // Combine desired velocity with the current velocity
+        Vector2 velocityChange = desiredVelocity.sub(currentVelocity);
+
+        // Apply the velocity change to the body
+        box2D.body.applyLinearImpulse(velocityChange, box2D.body.getWorldCenter(), true);
+
+        //box2D.body.setLinearVelocity(box2D.playerVelocity);
 
     }
 

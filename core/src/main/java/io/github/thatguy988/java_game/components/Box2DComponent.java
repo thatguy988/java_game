@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Box2DComponent implements Component 
 {
     public Body body;
-    public Vector2 playerVelocity = new Vector2(0, 0); // Holds the body velocity from player movement speed and recoil
+    public Vector2 playerVelocity = new Vector2(0, 0); // Holds the body velocity from player movement speed recoil gravity etc
 
 
     public Box2DComponent(Body body)

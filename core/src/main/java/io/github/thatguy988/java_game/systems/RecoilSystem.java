@@ -46,7 +46,24 @@ public class RecoilSystem extends IteratingSystem
     private void applyRecoil(WeaponsComponent weapon, Box2DComponent playerBody, FacingDirectionComponent.Direction direction)
     {
         float recoilSpeed = calculateRecoil(weapon);
-        Vector2 recoilDirection = new Vector2(direction == FacingDirectionComponent.Direction.RIGHT ? -1 : 1, 0);
+        Vector2 recoilDirection = new Vector2 (0,0);
+        if(direction == FacingDirectionComponent.Direction.RIGHT){
+            recoilDirection = new Vector2(-1,0);
+        }else if (direction == FacingDirectionComponent.Direction.LEFT){
+            recoilDirection = new Vector2(1,0);
+        }else if (direction == FacingDirectionComponent.Direction.UP){
+            recoilDirection = new Vector2(0,-1);
+        }else if (direction == FacingDirectionComponent.Direction.DOWN){
+            recoilDirection = new Vector2(0,1);
+        }else if (direction == FacingDirectionComponent.Direction.UPRIGHT){
+            recoilDirection = new Vector2(-1,-1);
+        }else if (direction == FacingDirectionComponent.Direction.UPLEFT){
+            recoilDirection = new Vector2(1,-1);
+        }else if (direction == FacingDirectionComponent.Direction.DOWNRIGHT){
+            recoilDirection = new Vector2(-1,1);
+        }else if (direction == FacingDirectionComponent.Direction.DOWNLEFT){
+            recoilDirection = new Vector2(1,1);
+        }
 
         // Add recoil effect to velocity
         playerBody.playerVelocity.add(recoilDirection.scl(recoilSpeed));
@@ -57,9 +74,11 @@ public class RecoilSystem extends IteratingSystem
      {
         switch (weapon.getWeaponType()) {
             case SHOTGUN:
-                return 500.0f; 
+                return 750.0f; 
             case MACHINEGUN:
-                return 250.0f; 
+                return 400.0f; 
+            case MINIGUN:
+                return 500.0f;
             default:
                 return 0;
         }
