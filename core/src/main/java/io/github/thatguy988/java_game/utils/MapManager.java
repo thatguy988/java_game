@@ -55,7 +55,7 @@ public class MapManager {
     }
 
     public void createStaticBodies() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0); // Assumes first layer is for static tiles
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0); // first layer is for static tiles
 
         float tileWidth = layer.getTileWidth();
         float tileHeight = layer.getTileHeight();
@@ -92,7 +92,7 @@ public class MapManager {
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.0f; // No bounciness
+        fixtureDef.restitution = 0.0f; 
 
         body.createFixture(fixtureDef);
         shape.dispose();

@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
-import io.github.thatguy988.java_game.components.PositionComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent.WeaponType;
 import io.github.thatguy988.java_game.utils.PositionUtils;
@@ -49,9 +48,6 @@ public class PlayerFactory
 
         com.badlogic.gdx.math.Vector2 bodyPositions = PositionUtils.getPhysicsBodyPosition(playerComponent.getWidth(), playerComponent.getHeight());
 
-    //public static Vector2 getRenderPosition(Vector2 position, float width, float height) {
-
-
 
         // rectangle shape for the player
         PolygonShape rectangle = new PolygonShape();
@@ -63,18 +59,13 @@ public class PlayerFactory
         fixtureDef.shape = rectangle;
         fixtureDef.density = 1.0f; // mass and inertia
         fixtureDef.friction = 0.3f; // friction when sliding along surfaces
-        fixtureDef.restitution = 0.0f; // no bouncing
+        fixtureDef.restitution = 0.0f; // no bounce
 
         body.createFixture(fixtureDef);
         rectangle.dispose();
 
         body.setFixedRotation(true);
         body.setLinearDamping(5.0f);
-
-
-
-        // Add components
-       player.add(new PositionComponent(playerSpawnX, playerSpawnY));
 
         player.add(new FacingDirectionComponent());
         player.add(new WeaponsComponent(WeaponType.PISTOL, 0.25f, 800f, 1));

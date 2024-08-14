@@ -5,25 +5,33 @@ import java.util.Random;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
+import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.BulletComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.LifetimeComponent;
-import io.github.thatguy988.java_game.components.PositionComponent;
 import io.github.thatguy988.java_game.components.Shooter;
-import io.github.thatguy988.java_game.components.VelocityComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.utils.PositionUtils;
 
+
 public class BulletFactory {
     private Engine engine;
-    private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+    private World physicsWorld;
+    private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
     private Random random = new Random();
 
 
 
-    public BulletFactory(Engine engine) {
+    public BulletFactory(Engine engine, World physicsWorld) {
         this.engine = engine;
+        this.physicsWorld = physicsWorld;
     }
 
     public void createBullet(Entity entity, Shooter shooter, FacingDirectionComponent.Direction direction, WeaponsComponent weapon)
@@ -50,52 +58,71 @@ public class BulletFactory {
     public Entity createSingleBullet(Entity entity, Shooter shooter, FacingDirectionComponent.Direction direction, float bulletspeed) {
         Entity bullet = engine.createEntity();
 
+        Box2DComponent shooter_body = bm.get(entity);
 
-        PositionComponent shooter_position = pm.get(entity);
+        Vector2 shooter_position = shooter_body.body.getPosition();
+
         
         com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooter_position.x, shooter_position.y), shooter.getWidth(), shooter.getHeight(), direction);
 
-        PositionComponent position = new PositionComponent(bulletPositions.x, bulletPositions.y);
+
+        // Box2D body for bullet
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.position.set(bulletPositions);  
+        Body body = physicsWorld.createBody(bodyDef);
 
         
-        bullet.add(position);
+        CircleShape circle = new CircleShape();
+        circle.setRadius(0.1f);
 
-        VelocityComponent velocity = new VelocityComponent();
+
+        // Define fixture for the bullet
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0f;  
+        fixtureDef.restitution = 0f; 
+
+        body.createFixture(fixtureDef);
+        circle.dispose();
+
+        // Set the bullet velocity based on direction
+        Vector2 bulletVelocity = new Vector2();
+
         if (direction == FacingDirectionComponent.Direction.RIGHT)
         {
-            velocity.x = bulletspeed;
+            bulletVelocity.set(bulletspeed, 0);
+
         }else if(direction == FacingDirectionComponent.Direction.LEFT)
         {
-            velocity.x = -bulletspeed;
+            bulletVelocity.set(-bulletspeed, 0);
+
         }else if(direction == FacingDirectionComponent.Direction.UP)
         {
-            velocity.y = bulletspeed;
+            bulletVelocity.set(0, bulletspeed);
+
         }else if(direction == FacingDirectionComponent.Direction.DOWN)
         {
-            velocity.y = -bulletspeed;
+            bulletVelocity.set(0, -bulletspeed);
+
         }else if(direction == FacingDirectionComponent.Direction.UPRIGHT)
         {
-            velocity.x = bulletspeed;
-            velocity.y = bulletspeed;
+            bulletVelocity.set(bulletspeed, bulletspeed);
         }else if(direction == FacingDirectionComponent.Direction.UPLEFT)
         {
-            velocity.x = -bulletspeed;
-            velocity.y = bulletspeed;
+            bulletVelocity.set(-bulletspeed, bulletspeed);
         }else if(direction == FacingDirectionComponent.Direction.DOWNRIGHT)
         {
-            velocity.x = bulletspeed;
-            velocity.y = -bulletspeed;
+            bulletVelocity.set(bulletspeed, -bulletspeed);
         }else if(direction == FacingDirectionComponent.Direction.DOWNLEFT)
         {
-            velocity.x = -bulletspeed;
-            velocity.y = -bulletspeed;
+            bulletVelocity.set(-bulletspeed, -bulletspeed);
         }
-        bullet.add(velocity);
+        body.setLinearVelocity(bulletVelocity);
 
-        BulletComponent bulletComponent = new BulletComponent();
-        bulletComponent.speed = bulletspeed;
-        bullet.add(bulletComponent);
-
+        bullet.add(new Box2DComponent(body));
+        bullet.add(new BulletComponent());
         bullet.add(new LifetimeComponent(2f));
 
         engine.addEntity(bullet);
@@ -113,16 +140,38 @@ public class BulletFactory {
         Entity bullet = engine.createEntity();
 
 
-        PositionComponent shooterPosition = pm.get(entity);
+        Box2DComponent shooter_body = bm.get(entity);
+
+        Vector2 shooterPosition = shooter_body.body.getPosition();
+
+
 
         com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), shooter.getHeight(), direction);
 
+        // Box2D body for bullet
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.position.set(bulletPositions);  
+        Body body = physicsWorld.createBody(bodyDef);
+
         
+        CircleShape circle = new CircleShape();
+        circle.setRadius(0.1f);
 
-        PositionComponent bulletPosition = new PositionComponent(bulletPositions.x, bulletPositions.y);
 
 
-        bullet.add(bulletPosition);
+        // Define fixture for the bullet
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0f;  
+        fixtureDef.restitution = 0f;  
+
+        body.createFixture(fixtureDef);
+        circle.dispose();
+
+        // Set the bullet velocity based on direction
+        Vector2 bulletVelocity = new Vector2();
 
         float baseAngle = 0;
 
@@ -157,15 +206,13 @@ public class BulletFactory {
         float velocityX = bulletSpeed * (float) Math.cos(Math.toRadians(bulletAngle));
         float velocityY = bulletSpeed * (float) Math.sin(Math.toRadians(bulletAngle));
 
-        VelocityComponent velocity = new VelocityComponent();
-        velocity.x = velocityX;
-        velocity.y = velocityY;
-        bullet.add(velocity);
+        bulletVelocity.set(velocityX, velocityY);
 
-        BulletComponent bulletComponent = new BulletComponent();
-        bulletComponent.speed = bulletSpeed;
-        bullet.add(bulletComponent);
 
+        body.setLinearVelocity(bulletVelocity);
+
+        bullet.add(new Box2DComponent(body));
+        bullet.add(new BulletComponent());
         bullet.add(new LifetimeComponent(2f));
 
         engine.addEntity(bullet);
@@ -223,25 +270,48 @@ public class BulletFactory {
     private void createShotgunBullets(Entity entity, Shooter shooter, FacingDirectionComponent.Direction direction, float velocityX, float velocityY) {
         Entity bullet = engine.createEntity();
 
+        Box2DComponent shooter_body = bm.get(entity);
 
-        PositionComponent shooterPosition = pm.get(entity);
+        Vector2 shooterPosition = shooter_body.body.getPosition();
+
+
 
         com.badlogic.gdx.math.Vector2 bulletPositions = PositionUtils.getBulletPosition(new com.badlogic.gdx.math.Vector2(shooterPosition.x, shooterPosition.y), shooter.getWidth(), shooter.getHeight(), direction);
 
-        PositionComponent bulletPosition = new PositionComponent(bulletPositions.x, bulletPositions.y);
+
+        // Box2D body for bullet
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.position.set(bulletPositions);  
+        Body body = physicsWorld.createBody(bodyDef);
+
+        
+        CircleShape circle = new CircleShape();
+        circle.setRadius(0.1f);
 
 
-        bullet.add(bulletPosition);
 
-        VelocityComponent velocity = new VelocityComponent();
-        velocity.x = velocityX;
-        velocity.y = velocityY;
-        bullet.add(velocity);
+        // Define fixture for the bullet
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0f;  
+        fixtureDef.restitution = 0f;  
 
-        BulletComponent bulletComponent = new BulletComponent();
-        bulletComponent.speed = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        bullet.add(bulletComponent);
+        body.createFixture(fixtureDef);
+        circle.dispose();
 
+        // Set the bullet velocity based on direction
+        Vector2 bulletVelocity = new Vector2();
+
+
+        bulletVelocity.set(velocityX, velocityY);
+
+
+        body.setLinearVelocity(bulletVelocity);
+
+        bullet.add(new Box2DComponent(body));
+        bullet.add(new BulletComponent());
         bullet.add(new LifetimeComponent(2f));
 
         engine.addEntity(bullet);

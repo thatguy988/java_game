@@ -11,16 +11,13 @@ import com.badlogic.gdx.Input;
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
-import io.github.thatguy988.java_game.components.VelocityComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent.WeaponType;
 
 
 public class PlayerInputSystem extends IteratingSystem
 {
-    // private ComponentMapper<Shooter> sm = ComponentMapper.getFor(Shooter.class);
     private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
-    private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<FacingDirectionComponent> fm = ComponentMapper.getFor(FacingDirectionComponent.class);
     private ComponentMapper<WeaponsComponent> wm = ComponentMapper.getFor(WeaponsComponent.class);
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
@@ -98,7 +95,7 @@ public class PlayerInputSystem extends IteratingSystem
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             weapon.setWeaponType(WeaponType.PISTOL);
             weapon.setFiringCooldown(0.25f);
-            weapon.setBulletSpeed(800f);
+            weapon.setBulletSpeed(100f);
             weapon.setBulletsPerShot(1);
             System.out.println("Switched to Pistol");
         }
