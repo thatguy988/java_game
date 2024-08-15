@@ -57,7 +57,7 @@ public class RenderSystem extends IteratingSystem {
         } else if (bullet != null) {
             Vector2 bulletbodyposition = bo.body.getPosition();
             shapeRenderer.setColor(0, 1, 0, 1); // Green color for bullets
-            shapeRenderer.circle(bulletbodyposition.x, bulletbodyposition.y, 5); // 5 pixel radius circle
+            shapeRenderer.circle(bulletbodyposition.x, bulletbodyposition.y, 3); // 5 pixel radius circle
         }
     }
 }

@@ -40,6 +40,11 @@ public class PlayerInputSystem extends IteratingSystem
 
         box2d.playerVelocity.setZero();
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && player.getCanJump()) {
+            box2d.body.applyLinearImpulse(0, 20000, box2d.body.getWorldCenter().x, box2d.body.getWorldCenter().y, true);
+            player.setCanJump(false); 
+        }
+
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
         {
@@ -95,7 +100,7 @@ public class PlayerInputSystem extends IteratingSystem
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             weapon.setWeaponType(WeaponType.PISTOL);
             weapon.setFiringCooldown(0.25f);
-            weapon.setBulletSpeed(100f);
+            weapon.setBulletSpeed(50f);
             weapon.setBulletsPerShot(1);
             System.out.println("Switched to Pistol");
         }

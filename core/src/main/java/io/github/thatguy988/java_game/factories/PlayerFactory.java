@@ -66,6 +66,8 @@ public class PlayerFactory
 
         body.setFixedRotation(true);
         body.setLinearDamping(5.0f);
+        body.setUserData(player); 
+
 
         player.add(new FacingDirectionComponent());
         player.add(new WeaponsComponent(WeaponType.PISTOL, 0.25f, 800f, 1));

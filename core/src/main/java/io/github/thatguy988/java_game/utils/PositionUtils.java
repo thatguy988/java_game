@@ -15,23 +15,24 @@ public class PositionUtils {
     }
 
     public static Vector2 getBulletPosition(Vector2 shooterPosition, float shooterWidth, float shooterHeight, FacingDirectionComponent.Direction direction) {
+        float offset = 5.0f;
         if (direction == FacingDirectionComponent.Direction.RIGHT) {
-            return new Vector2(shooterPosition.x + shooterWidth / 2, shooterPosition.y);
+            return new Vector2(shooterPosition.x + shooterWidth / 2 + offset, shooterPosition.y);
         } else if (direction == FacingDirectionComponent.Direction.LEFT) {
-            return new Vector2(shooterPosition.x - shooterWidth / 2, shooterPosition.y);
+            return new Vector2(shooterPosition.x - shooterWidth / 2 - offset, shooterPosition.y);
         } else if (direction == FacingDirectionComponent.Direction.UP){
-            return new Vector2(shooterPosition.x, shooterPosition.y + shooterHeight / 2);
+            return new Vector2(shooterPosition.x, shooterPosition.y + shooterHeight / 2 + offset);
         } else if (direction == FacingDirectionComponent.Direction.DOWN){
-            return new Vector2(shooterPosition.x, shooterPosition.y - shooterHeight / 2);
+            return new Vector2(shooterPosition.x, shooterPosition.y - shooterHeight / 2 - offset);
         }else if (direction == FacingDirectionComponent.Direction.UPRIGHT){
-            return new Vector2(shooterPosition.x + shooterWidth/2, shooterPosition.y + shooterHeight/2);
+            return new Vector2(shooterPosition.x + shooterWidth/2 + offset, shooterPosition.y + shooterHeight/2 + offset);
         }else if (direction == FacingDirectionComponent.Direction.UPLEFT){
-            return new Vector2(shooterPosition.x - shooterWidth/2, shooterPosition.y+shooterHeight/2);
+            return new Vector2(shooterPosition.x - shooterWidth/2 - offset, shooterPosition.y+shooterHeight/2 + offset);
         }else if (direction == FacingDirectionComponent.Direction.DOWNRIGHT){
-            return new Vector2(shooterPosition.x + shooterWidth/2, shooterPosition.y - shooterHeight/2);
+            return new Vector2(shooterPosition.x + shooterWidth/2 + offset, shooterPosition.y - shooterHeight/2 - offset);
         }else//downleft
         {
-            return new Vector2(shooterPosition.x - shooterWidth/2, shooterPosition.y - shooterHeight /2);
+            return new Vector2(shooterPosition.x - shooterWidth/2 - offset, shooterPosition.y - shooterHeight /2 - offset);
         }
     }
 }

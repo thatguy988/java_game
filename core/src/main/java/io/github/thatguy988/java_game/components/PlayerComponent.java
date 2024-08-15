@@ -8,11 +8,19 @@ public class PlayerComponent implements Component, Shooter {
     private boolean recoilTriggered = false;
     private float width = 8;
     private float height = 8;
-    
+    private boolean canJump = false;
 
     
+    public void setCanJump(boolean jump)
+    {
+        this.canJump = jump;
+    }
 
-
+    public boolean getCanJump()
+    {
+        return this.canJump;
+    }
+    
     public void setRecoilTriggered(boolean triggered)
     {
         this.recoilTriggered = triggered;

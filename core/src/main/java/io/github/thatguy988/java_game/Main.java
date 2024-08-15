@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import io.github.thatguy988.java_game.factories.BulletFactory;
 import io.github.thatguy988.java_game.factories.PlayerFactory;
+import io.github.thatguy988.java_game.systems.CollisionSystem;
 import io.github.thatguy988.java_game.systems.FiringSystem;
 import io.github.thatguy988.java_game.systems.LifetimeSystem;
 import io.github.thatguy988.java_game.systems.PhysicsSystem;
@@ -38,18 +39,17 @@ public class Main extends ApplicationAdapter {
     public void create() {
         engine = new Engine();
         shapeRenderer = new ShapeRenderer();
-        physicsWorld = new World(new Vector2(0, -9.8f), false);
+        physicsWorld = new World(new Vector2(0, -220f), false);
         playerFactory = new PlayerFactory(engine, physicsWorld);
         bulletFactory = new BulletFactory(engine, physicsWorld);
 
 
-        MapManager newMap = new MapManager("TitledMaps/testingmap1.tmx", physicsWorld);
+        MapManager newMap = new MapManager("TitledMaps/testingmap1.tmx", physicsWorld, engine);
         map = newMap.loadMap();
 
         Vector2 playerSpawnPoints = newMap.getPlayerSpawnPoint();
         newMap.createStaticBodies();
 
-        // Create map renderer with scaling
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         debugRenderer = new Box2DDebugRenderer();
 
@@ -90,11 +90,16 @@ public class Main extends ApplicationAdapter {
     }
 
     private void initializeSystems() {
+
+        CollisionSystem collisionSystem = new CollisionSystem(physicsWorld);
+        collisionSystem.initialize();  
+
         engine.addSystem(new PhysicsSystem(physicsWorld));
         engine.addSystem(new PlayerInputSystem());
         engine.addSystem(new FiringSystem(bulletFactory));
         engine.addSystem(new RenderSystem(shapeRenderer));
-        engine.addSystem(new LifetimeSystem());
+        engine.addSystem(new LifetimeSystem(physicsWorld));
         engine.addSystem(new RecoilSystem());
+        engine.addSystem(collisionSystem);
     }
 }

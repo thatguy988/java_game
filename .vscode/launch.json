@@ -3,6 +3,13 @@
     "configurations": [
       {
         "type": "java",
+        "name": "Lwjgl3Launcher",
+        "request": "launch",
+        "mainClass": "io.github.thatguy988.java_game.lwjgl3.Lwjgl3Launcher",
+        "projectName": "lwjgl3"
+      },
+      {
+        "type": "java",
         "name": "Debug LWJGL3",
         "request": "launch",
         "mainClass": "io.github.thatguy988.java_game.Lwjgl3Launcher",

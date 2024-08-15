@@ -68,13 +68,16 @@ public class BulletFactory {
 
         // Box2D body for bullet
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.type = BodyDef.BodyType.DynamicBody; 
         bodyDef.position.set(bulletPositions);  
         Body body = physicsWorld.createBody(bodyDef);
+        body.setGravityScale(0);
+
+        //body.setBullet(true);
 
         
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.1f);
+        circle.setRadius(3.0f);
 
 
         // Define fixture for the bullet
@@ -120,12 +123,17 @@ public class BulletFactory {
             bulletVelocity.set(-bulletspeed, -bulletspeed);
         }
         body.setLinearVelocity(bulletVelocity);
+        body.setUserData(bullet);
+
 
         bullet.add(new Box2DComponent(body));
-        bullet.add(new BulletComponent());
-        bullet.add(new LifetimeComponent(2f));
+        bullet.add(new BulletComponent(BulletComponent.BulletType.PLAYER));
+        bullet.add(new LifetimeComponent(2.0f));
+
 
         engine.addEntity(bullet);
+
+
         return bullet;
     }
 
@@ -150,13 +158,15 @@ public class BulletFactory {
 
         // Box2D body for bullet
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.type = BodyDef.BodyType.DynamicBody; 
         bodyDef.position.set(bulletPositions);  
         Body body = physicsWorld.createBody(bodyDef);
+        body.setGravityScale(0);
+
 
         
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.1f);
+        circle.setRadius(3.0f);
 
 
 
@@ -210,10 +220,14 @@ public class BulletFactory {
 
 
         body.setLinearVelocity(bulletVelocity);
+        body.setUserData(bullet);
+
 
         bullet.add(new Box2DComponent(body));
-        bullet.add(new BulletComponent());
+        bullet.add(new BulletComponent(BulletComponent.BulletType.PLAYER));
         bullet.add(new LifetimeComponent(2f));
+
+
 
         engine.addEntity(bullet);
     }
@@ -281,13 +295,15 @@ public class BulletFactory {
 
         // Box2D body for bullet
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody; 
+        bodyDef.type = BodyDef.BodyType.DynamicBody; 
         bodyDef.position.set(bulletPositions);  
         Body body = physicsWorld.createBody(bodyDef);
+        body.setGravityScale(0);
+
 
         
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.1f);
+        circle.setRadius(3.0f);
 
 
 
@@ -311,8 +327,10 @@ public class BulletFactory {
         body.setLinearVelocity(bulletVelocity);
 
         bullet.add(new Box2DComponent(body));
-        bullet.add(new BulletComponent());
+        bullet.add(new BulletComponent(BulletComponent.BulletType.PLAYER));
         bullet.add(new LifetimeComponent(2f));
+
+        body.setUserData(bullet);
 
         engine.addEntity(bullet);
     }
