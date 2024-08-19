@@ -20,15 +20,12 @@ public class RenderSystem extends IteratingSystem {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
 
-    public RenderSystem(ShapeRenderer shapeRenderer) {
+    public RenderSystem(ShapeRenderer shapeRenderer, OrthographicCamera camera) {
         super(Family.one(PlayerComponent.class, BulletComponent.class).get());
         this.shapeRenderer = shapeRenderer;
-    }
-
-    public void setCamera(OrthographicCamera camera) {
         this.camera = camera;
     }
-
+   
     @Override
     public void update(float deltaTime) {
         if (camera != null) {

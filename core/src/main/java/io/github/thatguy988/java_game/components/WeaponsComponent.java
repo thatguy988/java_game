@@ -2,17 +2,11 @@ package io.github.thatguy988.java_game.components;
 
 import com.badlogic.ashley.core.Component;
 
+import io.github.thatguy988.java_game.utils.WeaponType;
+
+
 public class WeaponsComponent implements Component
 {
-    public enum WeaponType
-    {
-        PISTOL,
-        MACHINEGUN,
-        SHOTGUN,
-        MINIGUN,
-        ENEMYGRUNT
-    }
-
     private WeaponType weaponType;
     private float FiringCooldown;
     private float BulletSpeed;

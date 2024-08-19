@@ -1,6 +1,5 @@
 package io.github.thatguy988.java_game.factories;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -9,20 +8,20 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import io.github.thatguy988.java_game.components.AmmoCounterComponent;
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
+import io.github.thatguy988.java_game.components.HealthComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
-import io.github.thatguy988.java_game.components.WeaponsComponent.WeaponType;
 import io.github.thatguy988.java_game.utils.PositionUtils;
+import io.github.thatguy988.java_game.utils.WeaponType;
 
 
 public class PlayerFactory 
 {
     private Engine engine;
     private World physicsWorld;
-
-    private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
     
     public PlayerFactory(Engine engine, World physicsWorld)
     {
@@ -72,6 +71,8 @@ public class PlayerFactory
         player.add(new FacingDirectionComponent());
         player.add(new WeaponsComponent(WeaponType.PISTOL, 0.25f, 800f, 1));
         player.add(new Box2DComponent(body));
+        player.add(new AmmoCounterComponent());
+        player.add(new HealthComponent(100));
 
         return player;
     }

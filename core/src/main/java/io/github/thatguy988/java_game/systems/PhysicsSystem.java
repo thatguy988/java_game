@@ -42,7 +42,7 @@ public class PhysicsSystem extends IteratingSystem
 
         if(player != null)
         {
-            boolean canJump = RayCastingUtils.isPlayerOnGround(world, box2D.body.getPosition(), 5.0f);
+            boolean canJump = RayCastingUtils.isPlayerOnGround(world, box2D.body.getPosition(), player.getJumpRaylength());
             player.setCanJump(canJump);
 
             // Calculate desired velocity based on player input

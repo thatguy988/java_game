@@ -12,7 +12,7 @@ import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
-import io.github.thatguy988.java_game.components.WeaponsComponent.WeaponType;
+import io.github.thatguy988.java_game.utils.WeaponType;
 
 
 public class PlayerInputSystem extends IteratingSystem
@@ -41,19 +41,19 @@ public class PlayerInputSystem extends IteratingSystem
         box2d.playerVelocity.setZero();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F) && player.getCanJump()) {
-            box2d.body.applyLinearImpulse(0, 20000, box2d.body.getWorldCenter().x, box2d.body.getWorldCenter().y, true);
+            box2d.body.applyLinearImpulse(0, player.getJumpSpeed(), box2d.body.getWorldCenter().x, box2d.body.getWorldCenter().y, true);
             player.setCanJump(false); 
         }
 
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
         {
-            box2d.playerVelocity.x = 200;
+            box2d.playerVelocity.x = player.getMovementSpeed();
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
         {
-            box2d.playerVelocity.x = -200;
+            box2d.playerVelocity.x = -player.getMovementSpeed();
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A))
@@ -100,7 +100,7 @@ public class PlayerInputSystem extends IteratingSystem
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             weapon.setWeaponType(WeaponType.PISTOL);
             weapon.setFiringCooldown(0.25f);
-            weapon.setBulletSpeed(50f);
+            weapon.setBulletSpeed(800f);
             weapon.setBulletsPerShot(1);
             System.out.println("Switched to Pistol");
         }
@@ -120,7 +120,7 @@ public class PlayerInputSystem extends IteratingSystem
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
             weapon.setWeaponType(WeaponType.MINIGUN);
-            weapon.setFiringCooldown(0.01f);
+            weapon.setFiringCooldown(0.05f);
             weapon.setBulletSpeed(1600f);
             weapon.setBulletsPerShot(1);
             System.out.println("Switched to MINIGUN");

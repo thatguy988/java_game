@@ -1,5 +1,7 @@
 package io.github.thatguy988.java_game.utils;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Engine;
@@ -59,6 +61,29 @@ public class MapManager {
 
         System.err.println("PlayerSpawn object not found.");
         return new Vector2(0, 0);
+    }
+
+    public List<Vector2> getEnemySpawnPoints() {
+        MapLayer objectLayer = map.getLayers().get("EnemySpawnPoint");
+        List<Vector2> spawnPoints = new ArrayList<>();
+        
+        if (objectLayer == null) {
+            System.err.println("SpawnPoint layer not found in map.");
+            return spawnPoints;
+        }
+
+        for (MapObject object : objectLayer.getObjects()) {
+            if (object instanceof RectangleMapObject && "EnemySpawn".equals(object.getName())) {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                spawnPoints.add(new Vector2(rectangle.x, rectangle.y));
+            }
+        }
+
+        if (spawnPoints.isEmpty()) {
+            System.err.println("No EnemySpawn objects found.");
+        }
+
+        return spawnPoints;
     }
 
     public void createStaticBodies() {
