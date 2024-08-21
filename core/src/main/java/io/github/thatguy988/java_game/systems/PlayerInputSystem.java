@@ -41,8 +41,17 @@ public class PlayerInputSystem extends IteratingSystem
         box2d.playerVelocity.setZero();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F) && player.getCanJump()) {
-            box2d.body.applyLinearImpulse(0, player.getJumpSpeed(), box2d.body.getWorldCenter().x, box2d.body.getWorldCenter().y, true);
+            player.setJumpTimer(player.getJumpDuration());
             player.setCanJump(false); 
+        }
+
+
+        // jump key is being held down
+        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+            player.setHoldingJump(true);
+        } else {
+            player.setHoldingJump(false);
+            player.setJumpTimer(0);
         }
 
 

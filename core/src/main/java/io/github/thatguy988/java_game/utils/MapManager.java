@@ -1,7 +1,5 @@
 package io.github.thatguy988.java_game.utils;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Engine;
@@ -20,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.GroundComponent;
@@ -63,9 +62,9 @@ public class MapManager {
         return new Vector2(0, 0);
     }
 
-    public List<Vector2> getEnemySpawnPoints() {
-        MapLayer objectLayer = map.getLayers().get("EnemySpawnPoint");
-        List<Vector2> spawnPoints = new ArrayList<>();
+    public Array<Vector2> getEnemySpawnPoints() {
+        MapLayer objectLayer = map.getLayers().get("EnemySpawnPointsLayer");
+        Array<Vector2> spawnPoints = new Array<>();
         
         if (objectLayer == null) {
             System.err.println("SpawnPoint layer not found in map.");
@@ -86,6 +85,53 @@ public class MapManager {
         return spawnPoints;
     }
 
+
+    public Array<Vector2> getHealthBoxSpawnPoints() {
+        MapLayer objectLayer = map.getLayers().get("HealthBoxSpawnPointsLayer");
+        Array<Vector2> spawnPoints = new Array<>();
+        
+        if (objectLayer == null) {
+            System.err.println("SpawnPoint layer not found in map.");
+            return spawnPoints;
+        }
+
+        for (MapObject object : objectLayer.getObjects()) {
+            if (object instanceof RectangleMapObject && "HealthSpawn".equals(object.getName())) {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                spawnPoints.add(new Vector2(rectangle.x, rectangle.y));
+            }
+        }
+
+        if (spawnPoints.isEmpty()) {
+            System.err.println("No HealthSpawn objects found.");
+        }
+
+        return spawnPoints;
+    }
+
+    public Array<Vector2> getAmmoBoxSpawnPoints() {
+        MapLayer objectLayer = map.getLayers().get("AmmoBoxSpawnPointsLayer");
+        Array<Vector2> spawnPoints = new Array<>();
+        
+        if (objectLayer == null) {
+            System.err.println("SpawnPoint layer not found in map.");
+            return spawnPoints;
+        }
+
+        for (MapObject object : objectLayer.getObjects()) {
+            if (object instanceof RectangleMapObject && "AmmoSpawn".equals(object.getName())) {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                spawnPoints.add(new Vector2(rectangle.x, rectangle.y));
+            }
+        }
+
+        if (spawnPoints.isEmpty()) {
+            System.err.println("No AmmoSpawn objects found.");
+        }
+
+        return spawnPoints;
+    }
+
     public void createStaticBodies() {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0); // first layer is for static tiles
 
@@ -96,9 +142,9 @@ public class MapManager {
         // move hashset to attribute of mapmanager if it is needed in multple methods
         //else here locally if only needed here then keep it here
         Set<Integer> solidTileIds = new HashSet<>();
-        solidTileIds.add(203); // IDs for solid tiles
-        solidTileIds.add(204);
-        solidTileIds.add(205); 
+        solidTileIds.add(27); // IDs for solid tiles
+        solidTileIds.add(28);
+        solidTileIds.add(29); 
 
 
         for (int y = 0; y < layer.getHeight(); y++) {

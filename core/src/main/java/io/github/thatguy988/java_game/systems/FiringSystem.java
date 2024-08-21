@@ -45,10 +45,7 @@ public class FiringSystem extends IteratingSystem {
             bulletFactory.createBullet(entity, shooter, facing.direction, weapon);
             shooter.setTimeSinceLastShot(0f);
             ammo.reduceAmmo(weapon.getWeaponType(), 1);
-            if(player != null)
-            {
-                player.setRecoilTriggered(true);
-            }
+            player.setRecoilTriggered(true);
         }
     }
 

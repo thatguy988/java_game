@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.BulletComponent;
+import io.github.thatguy988.java_game.components.EnemyComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.utils.PositionUtils;
 
@@ -17,11 +18,12 @@ public class RenderSystem extends IteratingSystem {
     private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<BulletComponent> bm = ComponentMapper.getFor(BulletComponent.class);
     private ComponentMapper<Box2DComponent> boxm = ComponentMapper.getFor(Box2DComponent.class);
+    private ComponentMapper<EnemyComponent> em = ComponentMapper.getFor(EnemyComponent.class);
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
 
     public RenderSystem(ShapeRenderer shapeRenderer, OrthographicCamera camera) {
-        super(Family.one(PlayerComponent.class, BulletComponent.class).get());
+        super(Family.one(PlayerComponent.class, BulletComponent.class, EnemyComponent.class).get());
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
     }
@@ -41,6 +43,7 @@ public class RenderSystem extends IteratingSystem {
         PlayerComponent player = plcm.get(entity);
         BulletComponent bullet = bm.get(entity);
         Box2DComponent  bo = boxm.get(entity);
+        EnemyComponent enemy = em.get(entity);
 
         if (player != null) {
             Vector2 bodyPosition = bo.body.getPosition();
@@ -55,6 +58,13 @@ public class RenderSystem extends IteratingSystem {
             Vector2 bulletbodyposition = bo.body.getPosition();
             shapeRenderer.setColor(0, 1, 0, 1); // Green color for bullets
             shapeRenderer.circle(bulletbodyposition.x, bulletbodyposition.y, 3); // 5 pixel radius circle
+        }else if (enemy != null){
+            Vector2 enemyBodyPosition = bo.body.getPosition();
+            float width = enemy.getWidth();
+            float height = enemy.getHeight();
+            shapeRenderer.setColor(0,0,1,1);//color blue for enemies
+            Vector2 renderPosition = PositionUtils.getRenderPosition(enemyBodyPosition.x, enemyBodyPosition.y, width, height);
+            shapeRenderer.rect(renderPosition.x, renderPosition.y, width, height);
         }
     }
 }

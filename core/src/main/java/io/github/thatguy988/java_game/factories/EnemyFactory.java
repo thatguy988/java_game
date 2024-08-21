@@ -8,45 +8,43 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import io.github.thatguy988.java_game.components.AmmoCounterComponent;
 import io.github.thatguy988.java_game.components.Box2DComponent;
+import io.github.thatguy988.java_game.components.EnemyComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
 import io.github.thatguy988.java_game.components.HealthComponent;
-import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.utils.PositionUtils;
 import io.github.thatguy988.java_game.utils.WeaponType;
 
-
-public class PlayerFactory 
+public class EnemyFactory 
 {
     private Engine engine;
     private World physicsWorld;
     
-    public PlayerFactory(Engine engine, World physicsWorld)
+    public EnemyFactory(Engine engine, World physicsWorld)
     {
         this.engine = engine;
         this.physicsWorld = physicsWorld;
     }
 
-    public Entity createPlayer(float playerSpawnX, float playerSpawnY) {
-        Entity player = engine.createEntity();
-        
-        PlayerComponent playerComponent = new PlayerComponent();
-        player.add(playerComponent);
+    public Entity createEnemy(float spawnX, float spawnY) {
+        Entity enemy = engine.createEntity();
 
-        // define Box2D body for player
+        EnemyComponent enemyComponent = new EnemyComponent();
+        enemy.add(enemyComponent);
+        
+        // Box2D body for enemy
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(playerSpawnX, playerSpawnY);
+        bodyDef.position.set(spawnX, spawnY);
         Body body = physicsWorld.createBody(bodyDef);
 
-        com.badlogic.gdx.math.Vector2 bodyPositions = PositionUtils.getPhysicsBodyPosition(playerComponent.getWidth(), playerComponent.getHeight());
+        
+        com.badlogic.gdx.math.Vector2 bodyPositions = PositionUtils.getPhysicsBodyPosition(enemyComponent.getWidth(), enemyComponent.getHeight());
 
-
-        // rectangle shape for the player
+        // shape of the enemy
         PolygonShape rectangle = new PolygonShape();
-        rectangle.setAsBox(bodyPositions.x , bodyPositions.y);
+        rectangle.setAsBox(bodyPositions.x, bodyPositions.y);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = rectangle;
@@ -59,16 +57,13 @@ public class PlayerFactory
 
         body.setFixedRotation(true);
         body.setLinearDamping(5.0f);
-        body.setUserData(player); 
+        body.setUserData(enemy);
 
+        enemy.add(new FacingDirectionComponent());
+        enemy.add(new WeaponsComponent(WeaponType.ENEMYGRUNT, 0.5f, 600f, 1));
+        enemy.add(new Box2DComponent(body));
+        enemy.add(new HealthComponent(50)); 
 
-        player.add(new FacingDirectionComponent());
-        player.add(new WeaponsComponent(WeaponType.PISTOL, 0.25f, 800f, 1));
-        player.add(new Box2DComponent(body));
-        player.add(new AmmoCounterComponent());
-        player.add(new HealthComponent(100));
-
-        return player;
+        return enemy;
     }
-    
 }

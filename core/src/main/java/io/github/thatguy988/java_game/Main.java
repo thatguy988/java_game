@@ -13,12 +13,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import io.github.thatguy988.java_game.components.CameraComponent;
 import io.github.thatguy988.java_game.factories.BulletFactory;
+import io.github.thatguy988.java_game.factories.EnemyFactory;
 import io.github.thatguy988.java_game.factories.PlayerFactory;
 import io.github.thatguy988.java_game.systems.CameraSystem;
 import io.github.thatguy988.java_game.systems.CollisionSystem;
+import io.github.thatguy988.java_game.systems.EnemySpawnSystem;
 import io.github.thatguy988.java_game.systems.FiringSystem;
 import io.github.thatguy988.java_game.systems.LifetimeSystem;
 import io.github.thatguy988.java_game.systems.PhysicsSystem;
@@ -35,6 +38,7 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch spriteBatch;
     private BulletFactory bulletFactory;
     private PlayerFactory playerFactory;
+    private EnemyFactory enemyFactory;
     private World physicsWorld;
 
     private TiledMap map;
@@ -49,6 +53,7 @@ public class Main extends ApplicationAdapter {
         physicsWorld = new World(new Vector2(0, -220f), false);
         playerFactory = new PlayerFactory(engine, physicsWorld);
         bulletFactory = new BulletFactory(engine, physicsWorld);
+        enemyFactory = new EnemyFactory(engine, physicsWorld);
 
         // Create the camera component with viewport size
         CameraComponent cameraComponent = new CameraComponent(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f);
@@ -64,14 +69,14 @@ public class Main extends ApplicationAdapter {
         Vector2 playerSpawnPoints = newMap.getPlayerSpawnPoint();
         newMap.createStaticBodies();
 
+        Array<Vector2> enemySpawnPoints = new Array<>(newMap.getEnemySpawnPoints());
+
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         debugRenderer = new Box2DDebugRenderer();
 
         Entity player = playerFactory.createPlayer(playerSpawnPoints.x, playerSpawnPoints.y);
 
-
-        
-        initializeSystems(spriteBatch);
+        initializeSystems(spriteBatch, enemySpawnPoints);
 
         engine.addEntity(player);
     }
@@ -103,10 +108,11 @@ public class Main extends ApplicationAdapter {
         debugRenderer.dispose();
     }
 
-    private void initializeSystems(SpriteBatch spriteBatch) {
+    private void initializeSystems(SpriteBatch spriteBatch, Array<Vector2> enemySpawnPoints) {
         CameraComponent cameraComponent = engine.getEntitiesFor(Family.all(CameraComponent.class).get()).first().getComponent(CameraComponent.class);
         CollisionSystem collisionSystem = new CollisionSystem(physicsWorld);
         collisionSystem.initialize(); 
+
 
         engine.addSystem(new PhysicsSystem(physicsWorld));
 
@@ -123,6 +129,7 @@ public class Main extends ApplicationAdapter {
         engine.addSystem(new CameraSystem());
         engine.addSystem(new RenderSystem(shapeRenderer, cameraComponent.camera));
         engine.addSystem(new UISystem(spriteBatch));
+        engine.addSystem(new EnemySpawnSystem(cameraComponent.camera, enemySpawnPoints, enemyFactory));
 
     }
 

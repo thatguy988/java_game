@@ -9,16 +9,41 @@ public class PlayerComponent implements Component, Shooter {
     private boolean isFiring = false;
     private boolean recoilTriggered = false;
     private float width = 8;
-    private float height = 20;
+    private float height = 16;
     private boolean canJump = false;
+    private boolean isJumping = false;
     private float jumpRaylength = this.height * 0.625f;
     private float movementspeed = 500f;
-    private float jumpSpeed = 50000f;
+    private float jumpSpeed = 100000f;
+    private float jumpTimer = 0.0f;
+    private float jumpDuration = 0.5f;
 
 
+    public void setHoldingJump(boolean jumping)
+    {
+        this.isJumping = jumping;
+    }
+
+    public boolean isHoldingJump()
+    {
+        return this.isJumping;
+    }
 
 
-    
+    public float getJumpTimer()
+    {
+        return this.jumpTimer;
+    }
+
+    public void setJumpTimer(float time)
+    {
+        this.jumpTimer = time;
+    }
+
+    public float getJumpDuration()
+    {
+        return this.jumpDuration;
+    }
 
     public float getJumpRaylength()
     {
@@ -34,45 +59,7 @@ public class PlayerComponent implements Component, Shooter {
     {
         return this.jumpSpeed;
     }
-
-    
-
-
-    // public float calculateVelocity(float originalVelocity, float originalWidth, float originalHeight, float currentWidth, float currentHeight) {
-    //     float originalArea = originalWidth * originalHeight;
-    //     float currentArea = currentWidth * currentHeight;
-        
-    //     float newVelocity = originalVelocity * (currentArea / originalArea);
-    //     return newVelocity;
-    // }
-
-
-    // public float calculateJumpSpeed(float originalJumpSpeed, float originalWidth, float originalHeight, float currentWidth, float currentHeight) {
-    //     // Calculate the area of the original and current player sizes
-    //     float originalArea = originalWidth * originalHeight;
-    //     float currentArea = currentWidth * currentHeight;
-    
-    //     // Scale the jump speed based on the ratio of the current area to the original area
-    //     float newJumpSpeed = originalJumpSpeed * (currentArea / originalArea);
-    
-    //     return newJumpSpeed;
-    // }
-
-    // public float calculateRecoilForce(float originalRecoilForce, float originalWidth, float originalHeight, float currentWidth, float currentHeight) {
-    //     // Calculate the area of the original and current player sizes
-    //     float originalArea = originalWidth * originalHeight;
-    //     float currentArea = currentWidth * currentHeight;
-    
-    //     // Scale the recoil force based on the ratio of the current area to the original area
-    //     float newRecoilForce = originalRecoilForce * (currentArea / originalArea);
-    
-    //     return newRecoilForce;
-    // }
-    
-    
-    
-
-    
+ 
     public void setCanJump(boolean jump)
     {
         this.canJump = jump;

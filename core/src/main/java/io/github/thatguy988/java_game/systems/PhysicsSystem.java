@@ -9,17 +9,19 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.BulletComponent;
+import io.github.thatguy988.java_game.components.EnemyComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.utils.RayCastingUtils;
 
 
-
+//update physics for entities with box2d bodies player bullets etc
 public class PhysicsSystem extends IteratingSystem
 {
     private World world;
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
     private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<BulletComponent> bulletm = ComponentMapper.getFor(BulletComponent.class);
+    private ComponentMapper<EnemyComponent> em = ComponentMapper.getFor(EnemyComponent.class);
     public PhysicsSystem(World world)
     {
         super(Family.all(Box2DComponent.class).get());
@@ -31,6 +33,7 @@ public class PhysicsSystem extends IteratingSystem
         Box2DComponent box2D = bm.get(entity);
         PlayerComponent player = plcm.get(entity);
         BulletComponent bullet = bulletm.get(entity);
+        EnemyComponent enemy = em.get(entity);
 
 
         if (bullet != null && !bullet.getActiveState()) {
@@ -44,6 +47,13 @@ public class PhysicsSystem extends IteratingSystem
         {
             boolean canJump = RayCastingUtils.isPlayerOnGround(world, box2D.body.getPosition(), player.getJumpRaylength());
             player.setCanJump(canJump);
+
+
+            if (player.getJumpTimer() > 0 && player.isHoldingJump()) {
+
+                box2D.body.applyLinearImpulse(0, player.getJumpSpeed() * deltaTime, box2D.body.getWorldCenter().x, box2D.body.getWorldCenter().y, true);
+                player.setJumpTimer(player.getJumpTimer() - deltaTime);
+            }
 
             // Calculate desired velocity based on player input
             Vector2 desiredVelocity = new Vector2(box2D.playerVelocity);
@@ -66,6 +76,11 @@ public class PhysicsSystem extends IteratingSystem
             // Ensure gravity doesn't affect bullets by maintaining a consistent velocity
             box2D.body.setLinearVelocity(bulletVelocity);
 
+        }
+
+        if(enemy != null)
+        {
+            //System.out.println("Enemy physics");
         }
 
 

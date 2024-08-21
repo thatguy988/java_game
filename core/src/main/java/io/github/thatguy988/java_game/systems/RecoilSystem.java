@@ -74,11 +74,11 @@ public class RecoilSystem extends IteratingSystem
      {
         switch (weapon.getWeaponType()) {
             case SHOTGUN:
-                return 1875.0f; 
+                return 1875.0f * 2.0f; 
             case MACHINEGUN:
-                return 1000.0f; 
+                return 1000.0f * 2.0f; 
             case MINIGUN:
-                return 1250.0f;
+                return 1250.0f * 2.60f;
             default:
                 return 0;
         }

@@ -8,7 +8,7 @@ public class EnemyComponent implements Component, Shooter {
     private float timeSinceLastShot = 0f;
     private boolean isFiring = false;
     private float width = 8;
-    private float height = 8;
+    private float height = 16;
 
 
     @Override
