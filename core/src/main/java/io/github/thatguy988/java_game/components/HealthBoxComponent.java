@@ -7,6 +7,7 @@ public class HealthBoxComponent implements Component
     private int health;
     private float width = 4;
     private float height = 4;
+    private boolean active = true;
 
     public HealthBoxComponent(int numberOfHealth)
     {
@@ -31,6 +32,16 @@ public class HealthBoxComponent implements Component
     public float getHeight()
     {
         return this.height;
+    }
+
+    public boolean getActiveState()
+    {
+        return this.active;
+    }
+
+    public void setActiveState(boolean value)
+    {
+        this.active = value;
     }
     
 }

@@ -16,17 +16,22 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 import io.github.thatguy988.java_game.components.CameraComponent;
+import io.github.thatguy988.java_game.factories.AmmoBoxFactory;
 import io.github.thatguy988.java_game.factories.BulletFactory;
 import io.github.thatguy988.java_game.factories.EnemyFactory;
+import io.github.thatguy988.java_game.factories.HealthBoxFactory;
+import io.github.thatguy988.java_game.factories.LevelFactory;
 import io.github.thatguy988.java_game.factories.PlayerFactory;
 import io.github.thatguy988.java_game.systems.CameraSystem;
 import io.github.thatguy988.java_game.systems.CollisionSystem;
 import io.github.thatguy988.java_game.systems.EnemySpawnSystem;
 import io.github.thatguy988.java_game.systems.FiringSystem;
+import io.github.thatguy988.java_game.systems.ItemSpawnSystem;
 import io.github.thatguy988.java_game.systems.LifetimeSystem;
 import io.github.thatguy988.java_game.systems.PhysicsSystem;
 import io.github.thatguy988.java_game.systems.PlayerInputSystem;
 import io.github.thatguy988.java_game.systems.RecoilSystem;
+import io.github.thatguy988.java_game.systems.RemovalSystem;
 import io.github.thatguy988.java_game.systems.RenderSystem;
 import io.github.thatguy988.java_game.systems.UISystem;
 import io.github.thatguy988.java_game.utils.MapManager;
@@ -39,6 +44,8 @@ public class Main extends ApplicationAdapter {
     private BulletFactory bulletFactory;
     private PlayerFactory playerFactory;
     private EnemyFactory enemyFactory;
+    private HealthBoxFactory healthBoxFactory;
+    private AmmoBoxFactory ammoBoxFactory;
     private World physicsWorld;
 
     private TiledMap map;
@@ -54,6 +61,8 @@ public class Main extends ApplicationAdapter {
         playerFactory = new PlayerFactory(engine, physicsWorld);
         bulletFactory = new BulletFactory(engine, physicsWorld);
         enemyFactory = new EnemyFactory(engine, physicsWorld);
+        healthBoxFactory = new HealthBoxFactory(engine, physicsWorld);
+        ammoBoxFactory = new AmmoBoxFactory(engine, physicsWorld);
 
         // Create the camera component with viewport size
         CameraComponent cameraComponent = new CameraComponent(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f);
@@ -63,20 +72,23 @@ public class Main extends ApplicationAdapter {
         engine.addEntity(cameraEntity);
 
 
-        MapManager newMap = new MapManager("TitledMaps/testingmap1.tmx", physicsWorld, engine);
+        MapManager newMap = new MapManager("TitledMaps/testingmap1.tmx");
+        LevelFactory level = new LevelFactory(engine, physicsWorld);
         map = newMap.loadMap();
 
         Vector2 playerSpawnPoints = newMap.getPlayerSpawnPoint();
-        newMap.createStaticBodies();
+        level.createStaticBodies(map);
 
         Array<Vector2> enemySpawnPoints = new Array<>(newMap.getEnemySpawnPoints());
+        Array<Vector2> healthBoxSpawnPoints = new Array<>(newMap.getHealthBoxSpawnPoints());
+        Array<Vector2> ammoBoxSpawnPoints = new Array<>(newMap.getAmmoBoxSpawnPoints());
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         debugRenderer = new Box2DDebugRenderer();
 
         Entity player = playerFactory.createPlayer(playerSpawnPoints.x, playerSpawnPoints.y);
 
-        initializeSystems(spriteBatch, enemySpawnPoints);
+        initializeSystems(spriteBatch, player, enemySpawnPoints, healthBoxSpawnPoints, ammoBoxSpawnPoints);
 
         engine.addEntity(player);
     }
@@ -108,10 +120,15 @@ public class Main extends ApplicationAdapter {
         debugRenderer.dispose();
     }
 
-    private void initializeSystems(SpriteBatch spriteBatch, Array<Vector2> enemySpawnPoints) {
+    private void initializeSystems(SpriteBatch spriteBatch, Entity player, Array<Vector2> enemySpawnPoints, Array<Vector2> healthBoxSpawnPoints, Array<Vector2> ammoBoxSpawnPoints) {
         CameraComponent cameraComponent = engine.getEntitiesFor(Family.all(CameraComponent.class).get()).first().getComponent(CameraComponent.class);
         CollisionSystem collisionSystem = new CollisionSystem(physicsWorld);
         collisionSystem.initialize(); 
+
+        engine.addSystem(collisionSystem);
+
+
+        engine.addSystem(new RemovalSystem(physicsWorld, engine));
 
 
         engine.addSystem(new PhysicsSystem(physicsWorld));
@@ -123,19 +140,25 @@ public class Main extends ApplicationAdapter {
         engine.addSystem(new RecoilSystem());
         engine.addSystem(new FiringSystem(bulletFactory));
 
-        engine.addSystem(collisionSystem);
+        //engine.addSystem(collisionSystem);
 
-        engine.addSystem(new LifetimeSystem(physicsWorld));
-        engine.addSystem(new CameraSystem());
+        engine.addSystem(new LifetimeSystem(physicsWorld,engine));
+        engine.addSystem(new CameraSystem(player));
         engine.addSystem(new RenderSystem(shapeRenderer, cameraComponent.camera));
         engine.addSystem(new UISystem(spriteBatch));
-        engine.addSystem(new EnemySpawnSystem(cameraComponent.camera, enemySpawnPoints, enemyFactory));
+        engine.addSystem(new EnemySpawnSystem(engine, cameraComponent.camera, enemySpawnPoints, enemyFactory));
+        ItemSpawnSystem itemSpawnSystem = new ItemSpawnSystem(engine, healthBoxSpawnPoints, healthBoxFactory, ammoBoxSpawnPoints, ammoBoxFactory);
+        itemSpawnSystem.initialize();
+        engine.addSystem(itemSpawnSystem);
+        //engine.addSystem(new ItemSpawnSystem(engine, healthBoxSpawnPoints, healthBoxFactory, ammoBoxSpawnPoints, ammoBoxFactory));
+
 
     }
-
-
-    
 }
+
+
+
+
 
 
 

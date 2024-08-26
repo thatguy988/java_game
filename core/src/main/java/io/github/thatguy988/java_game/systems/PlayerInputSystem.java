@@ -111,28 +111,24 @@ public class PlayerInputSystem extends IteratingSystem
             weapon.setFiringCooldown(0.25f);
             weapon.setBulletSpeed(800f);
             weapon.setBulletsPerShot(1);
-            System.out.println("Switched to Pistol");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             weapon.setWeaponType(WeaponType.MACHINEGUN);
             weapon.setFiringCooldown(0.1f);
             weapon.setBulletSpeed(1200f);
             weapon.setBulletsPerShot(1);
-            System.out.println("Switched to Machine Gun");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
             weapon.setWeaponType(WeaponType.SHOTGUN);
             weapon.setFiringCooldown(0.5f);
             weapon.setBulletSpeed(1000f);
             weapon.setBulletsPerShot(5);
-            System.out.println("Switched to Shotgun");
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)){
             weapon.setWeaponType(WeaponType.MINIGUN);
             weapon.setFiringCooldown(0.05f);
             weapon.setBulletSpeed(1600f);
             weapon.setBulletsPerShot(1);
-            System.out.println("Switched to MINIGUN");
         }
     }
     

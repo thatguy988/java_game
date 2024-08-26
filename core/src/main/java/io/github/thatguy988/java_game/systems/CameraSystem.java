@@ -8,14 +8,15 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.CameraComponent;
-import io.github.thatguy988.java_game.components.PlayerComponent;
 
 public class CameraSystem extends IteratingSystem {
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
     private ComponentMapper<CameraComponent> cm = ComponentMapper.getFor(CameraComponent.class);
+    private Entity player;
 
-    public CameraSystem() {
+    public CameraSystem(Entity player) {
         super(Family.all(CameraComponent.class).get());
+        this.player = player;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class CameraSystem extends IteratingSystem {
         CameraComponent cameraComponent = cm.get(entity);
 
         // Assuming there's a player entity to follow
-        Entity player = getEngine().getEntitiesFor(Family.all(PlayerComponent.class, Box2DComponent.class).get()).first();
+        //Entity player = getEngine().getEntitiesFor(Family.all(PlayerComponent.class, Box2DComponent.class).get()).first();
         if (player != null) {
             Box2DComponent playerBox2D = bm.get(player);
             Vector2 playerPosition = playerBox2D.body.getPosition();

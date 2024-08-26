@@ -1,10 +1,10 @@
 package io.github.thatguy988.java_game.factories;
 
-import java.util.Random;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -25,7 +25,7 @@ public class BulletFactory {
     private Engine engine;
     private World physicsWorld;
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
-    private Random random = new Random();
+    //private Random random = new Random();
 
 
 
@@ -139,7 +139,7 @@ public class BulletFactory {
 
     private void createMachineGunSpread(Entity entity, Shooter shooter, FacingDirectionComponent.Direction direction, float bulletSpeed) {
         float spreadRange = 10.0f; 
-        float angleOffset = (random.nextFloat() - 0.5f) * spreadRange; 
+        float angleOffset = (MathUtils.random() - 0.5f) * spreadRange; 
 
         createMachineGunBullet(entity, shooter, direction, bulletSpeed, angleOffset);
     }
@@ -225,7 +225,7 @@ public class BulletFactory {
 
         bullet.add(new Box2DComponent(body));
         bullet.add(new BulletComponent(BulletComponent.BulletType.PLAYER));
-        bullet.add(new LifetimeComponent(2f));
+        bullet.add(new LifetimeComponent(10f));
 
 
 

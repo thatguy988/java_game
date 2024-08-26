@@ -34,13 +34,6 @@ public class PhysicsSystem extends IteratingSystem
         PlayerComponent player = plcm.get(entity);
         BulletComponent bullet = bulletm.get(entity);
         EnemyComponent enemy = em.get(entity);
-
-
-        if (bullet != null && !bullet.getActiveState()) {
-            world.destroyBody(box2D.body);  // Destroy the Box2D body
-            getEngine().removeEntity(entity);  // Remove the entity from the engine
-            return;  // Exit early to prevent further processing
-        }
        
 
         if(player != null)
@@ -80,7 +73,20 @@ public class PhysicsSystem extends IteratingSystem
 
         if(enemy != null)
         {
-            //System.out.println("Enemy physics");
+
+            //seperate knockback and movement
+            if(enemy.getKnockBackForce().len()>0)
+            {
+                box2D.body.applyLinearImpulse(enemy.getKnockBackForce(), box2D.body.getWorldCenter(), true);
+                enemy.clearKnockBackForce(); // set knockback force to 0 after applying it
+            }else
+            {
+                //apply enemy movement force?
+            }
+
+
+            //or combine knockback and movement forces?
+
         }
 
 

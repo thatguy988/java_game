@@ -1,6 +1,6 @@
 package io.github.thatguy988.java_game.systems;
 
-
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import io.github.thatguy988.java_game.factories.EnemyFactory;
 public class EnemySpawnSystem extends EntitySystem
 {
+    private Engine engine;
     private OrthographicCamera playerCamera;
     private Array<Vector2> enemySpawnPoints;
     private EnemyFactory enemyFactory;
@@ -18,12 +19,12 @@ public class EnemySpawnSystem extends EntitySystem
     private int maxNumberOfEnemies = 10;
     private int currentNumberOfEnemies = 0;
 
-    public EnemySpawnSystem(OrthographicCamera camera, Array<Vector2> enemySpawnPoints, EnemyFactory enemyFactory)
+    public EnemySpawnSystem(Engine engine, OrthographicCamera camera, Array<Vector2> enemySpawnPoints, EnemyFactory enemyFactory)
     {
+        this.engine = engine;
         this.playerCamera = camera;
         this.enemySpawnPoints = enemySpawnPoints;
         this.enemyFactory = enemyFactory;
-        
     }
 
     @Override
@@ -68,7 +69,7 @@ public class EnemySpawnSystem extends EntitySystem
 
     private void spawnEnemyAtLocation(Vector2 location) {
         Entity enemy = enemyFactory.createEnemy(location.x, location.y);
-        getEngine().addEntity(enemy);
+        engine.addEntity(enemy);
         currentNumberOfEnemies+=1;
     }
     

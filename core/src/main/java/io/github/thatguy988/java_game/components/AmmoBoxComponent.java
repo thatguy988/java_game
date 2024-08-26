@@ -11,11 +11,21 @@ public class AmmoBoxComponent implements Component
     private int ammo;
     private float width = 4;
     private float height = 4;
+    private boolean active = true;
 
-    public AmmoBoxComponent(WeaponType type, int numberOfAmmo)
+    public AmmoBoxComponent(WeaponType type)
     {
         this.weaponType = type;
-        this.ammo = numberOfAmmo;
+        if(type == WeaponType.SHOTGUN)
+        {
+            this.ammo = 4;
+        }else if(type == WeaponType.MACHINEGUN)
+        {
+            this.ammo = 30;
+        }else if(type == WeaponType.MINIGUN)
+        {
+            this.ammo = 60;
+        }
     }
     
     public WeaponType getWeaponType()
@@ -46,5 +56,15 @@ public class AmmoBoxComponent implements Component
     public float getHeight()
     {
         return this.height;
+    }
+
+    public boolean getActiveState()
+    {
+        return this.active;
+    }
+
+    public void setActiveState(boolean value)
+    {
+        this.active = value;
     }
 }

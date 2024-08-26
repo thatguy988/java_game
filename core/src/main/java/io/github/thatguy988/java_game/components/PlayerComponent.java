@@ -1,6 +1,7 @@
 package io.github.thatguy988.java_game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 
 public class PlayerComponent implements Component, Shooter {
     
@@ -17,6 +18,7 @@ public class PlayerComponent implements Component, Shooter {
     private float jumpSpeed = 100000f;
     private float jumpTimer = 0.0f;
     private float jumpDuration = 0.5f;
+    private Vector2 knockbackForce = new Vector2();
 
 
     public void setHoldingJump(boolean jumping)
@@ -111,6 +113,24 @@ public class PlayerComponent implements Component, Shooter {
     public void setisFiring(boolean firing)
     {
         this.isFiring = firing;
+    }
+
+    @Override
+    public Vector2 getKnockBackForce()
+    {
+        return this.knockbackForce;
+    }
+
+    @Override
+    public void setKnockBackForce(Vector2 force)
+    {
+        this.knockbackForce.set(force);
+    }
+
+    @Override
+    public void clearKnockBackForce()
+    {
+        this.knockbackForce.set(0,0);
     }
 
 }
