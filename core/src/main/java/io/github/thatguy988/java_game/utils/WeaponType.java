@@ -5,5 +5,5 @@ public enum WeaponType {
     SHOTGUN,
     MACHINEGUN,
     MINIGUN,
-    ENEMYGRUNT // only used in WeaponsComponent
+    ENEMYGRUNT
 }

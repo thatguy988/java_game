@@ -25,7 +25,6 @@ public class BulletFactory {
     private Engine engine;
     private World physicsWorld;
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
-    //private Random random = new Random();
 
 
 

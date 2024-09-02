@@ -122,7 +122,7 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
             return;
         }
 
-        // // Check if one entity is the player and the other is a player bullet
+        // Check if one entity is the player and the other is a player bullet
         boolean isPlayerAndPlayerBulletCollision =
                 (plcm.has(entityA) && bulletm.has(entityB) && bulletm.get(entityB).getBulletType() == BulletComponent.BulletType.PLAYER) ||
                 (plcm.has(entityB) && bulletm.has(entityA) && bulletm.get(entityA).getBulletType() == BulletComponent.BulletType.PLAYER);
@@ -157,7 +157,7 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
                 (em.has(entityA) && abm.has(entityB))||
                 (em.has(entityB) && abm.has(entityA));
         
-        boolean isBulletAndAmmoBoxCollisiion = 
+        boolean isBulletAndAmmoBoxCollision = 
                 (bulletm.has(entityA) && abm.has(entityB))||
                 (bulletm.has(entityB) && abm.has(entityA));
         
@@ -166,7 +166,7 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
         if (isPlayerAndPlayerBulletCollision || isBulletAndBulletCollision || 
             isEnemyAndHealthBoxCollision || isEnemyAndEnemyBulletCollision || 
             isBulletAndHealthBoxCollision || isEnemyAndAmmoBoxCollision ||
-            isBulletAndAmmoBoxCollisiion) { 
+            isBulletAndAmmoBoxCollision) { 
             // ignore the collision between objects
             contact.setEnabled(false);
             return;

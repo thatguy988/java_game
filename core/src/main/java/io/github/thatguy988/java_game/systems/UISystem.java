@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -42,8 +43,20 @@ public class UISystem extends IteratingSystem
         AmmoCounterComponent ammo = am.get(entity);
         WeaponsComponent weapon = wm.get(entity);
         HealthComponent health = hm.get(entity);
-        String ammoText;
 
+        if(health.isOutofHealth())
+        {
+            showGameOverUI();
+            return;
+        }
+
+        showPlayerUI(ammo, weapon, health);
+
+    }
+
+    private void showPlayerUI(AmmoCounterComponent ammo, WeaponsComponent weapon, HealthComponent health)
+    {
+        String ammoText;
         if(weapon.getWeaponType() == WeaponType.PISTOL)
         {
             ammoText = "Ammo: " + "Pistol: Unlimited";
@@ -56,8 +69,14 @@ public class UISystem extends IteratingSystem
         String healthText = "Health: " + health.getCurrentHealth() + "/" + health.getMaxHealth();
 
         font.draw(spritebatch, ammoText, 20, 100);    
-        font.draw(spritebatch, healthText, 20, 120);    
+        font.draw(spritebatch, healthText, 20, 120);
 
     }
     
+    private void showGameOverUI()
+    {
+        font.draw(spritebatch, "Game Over", Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2 + 50);
+        font.draw(spritebatch, "Press Enter to Restart", Gdx.graphics.getWidth() / 2 - 70, Gdx.graphics.getHeight() / 2);
+        font.draw(spritebatch, "Press Q to Quit", Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2 - 50);
+    }
 }

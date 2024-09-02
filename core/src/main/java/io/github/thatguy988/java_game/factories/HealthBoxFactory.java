@@ -19,14 +19,12 @@ public class HealthBoxFactory
 {
     private Engine engine;
     private World physicsWorld;
-    //private Random random;
 
     
     public HealthBoxFactory(Engine engine, World physicsWorld)
     {
         this.engine = engine;
         this.physicsWorld = physicsWorld;
-        //this.random = new Random(); 
 
     }
 

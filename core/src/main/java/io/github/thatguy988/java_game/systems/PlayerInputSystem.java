@@ -8,35 +8,78 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import io.github.thatguy988.java_game.Main;
 import io.github.thatguy988.java_game.components.Box2DComponent;
 import io.github.thatguy988.java_game.components.FacingDirectionComponent;
+import io.github.thatguy988.java_game.components.HealthComponent;
 import io.github.thatguy988.java_game.components.PlayerComponent;
 import io.github.thatguy988.java_game.components.WeaponsComponent;
 import io.github.thatguy988.java_game.utils.WeaponType;
 
 
+
 public class PlayerInputSystem extends IteratingSystem
 {
+    private Main game;
     private ComponentMapper<PlayerComponent> plcm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<FacingDirectionComponent> fm = ComponentMapper.getFor(FacingDirectionComponent.class);
     private ComponentMapper<WeaponsComponent> wm = ComponentMapper.getFor(WeaponsComponent.class);
     private ComponentMapper<Box2DComponent> bm = ComponentMapper.getFor(Box2DComponent.class);
+    private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
 
 
 
-    public PlayerInputSystem()
+
+    public PlayerInputSystem(Main game)
     {
-        super(Family.all(PlayerComponent.class, Box2DComponent.class).get());
+        super(Family.all(PlayerComponent.class).get());
+        this.game = game;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime)
     {
+
+        
         PlayerComponent player = plcm.get(entity);
         FacingDirectionComponent facing = fm.get(entity);
         WeaponsComponent weapon = wm.get(entity);
         Box2DComponent box2d = bm.get(entity);
+        HealthComponent playerHealth = hm.get(entity);
 
+
+        if (playerHealth.isOutofHealth()) 
+        {
+            handleGameOverInput();
+            return; // skip other inputs when the player is dead
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.P))
+        {
+            System.out.println("P is pressed");
+            this.game.setScreen(this.game.getPauseMenuScreen());
+        }
+
+        
+        playerMovementInput(player, facing, weapon, box2d);
+    }
+
+    private void handleGameOverInput()
+    {
+        //restart game
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
+        {
+            this.game.setScreen(this.game.getGameScreen()); 
+        }
+        //stop game go to main menu
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) 
+        {
+            this.game.setScreen(this.game.getMainMenuScreen());
+        }
+    }
+
+    private void playerMovementInput(PlayerComponent player, FacingDirectionComponent facing, WeaponsComponent weapon, Box2DComponent box2d)
+    {
 
         box2d.playerVelocity.setZero();
 
@@ -131,5 +174,6 @@ public class PlayerInputSystem extends IteratingSystem
             weapon.setBulletsPerShot(1);
         }
     }
-    
 }
+    
+
